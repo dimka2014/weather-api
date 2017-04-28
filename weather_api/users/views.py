@@ -1,12 +1,10 @@
 import uuid
 
-from django_pyowm.models import Location
-from rest_framework import generics, permissions, serializers, status, mixins, viewsets
+from rest_framework import generics, permissions, serializers, status, mixins
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 
-from weather_api.weather.serializers import LocationSerializer
 from .models import User
 from .serializers import UserSerializer, ResetPasswordSerializer, ChangePasswordSerializer, EmailSerializer
 

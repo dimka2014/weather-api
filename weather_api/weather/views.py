@@ -1,8 +1,8 @@
 from rest_framework import generics, filters, permissions, viewsets, mixins, serializers, status
 from rest_framework.response import Response
-from django_pyowm.models import Location
+from django_pyowm.models import Location, Forecast
 
-from .serializers import LocationSerializer
+from .serializers import LocationSerializer, ForecastSerializer
 
 
 class LocationsView(generics.ListAPIView):
@@ -24,6 +24,21 @@ class UserLocationsView(generics.ListAPIView):
 
     def get_queryset(self):
         return Location.objects.filter(users=self.request.user).order_by('name')
+
+
+class ForecastsView(generics.ListAPIView):
+    """
+    List of user location forecasts
+    """
+    serializer_class = ForecastSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        return (Forecast.objects
+                .filter(location__users=self.request.user)
+                .select_related('location')
+                .prefetch_related('weathers')
+                .order_by('-reception_time'))
 
 
 class UserLocationAddDeleteViewSet(mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):

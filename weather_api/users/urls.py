@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^reset-password-send-email/$', views.ResetPasswordEmailView.as_view()),
     url(r'^reset-password/(?P<reset_password_token>[0-9A-Za-z]+)/$', views.ResetPasswordView.as_view()),
     url(r'^change-password/$', views.ChangePasswordView.as_view()),
+    url(r'^me/$', views.UserView.as_view()),
 ]
