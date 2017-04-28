@@ -1,0 +1,42 @@
+version: '2'
+services:
+    proxy:
+        image: nginx:alpine
+        ports:
+            - "8000:80"
+        volumes_from:
+            - app
+        volumes:
+            - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+        depends_on:
+            - app
+
+    app:
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile
+
+        entrypoint: /srv/application/docker/docker-entrypoint.sh postgres 5432
+        command: /srv/application/docker/start-unicorn.sh
+        volumes:
+            - .:/srv/application
+        environment:
+            DJANGO_SETTINGS_MODULE: "config.settings.production"
+            SECRET_KEY: test
+
+            DATABASE_URL: "psql://app:app@postgres:5432/app"
+            EMAIL_URL: "filemail://mails"
+            FACEBOOK_KEY: test
+            FACEBOOK_SECRET: testsecret
+
+    cron:
+        extends: app
+        entrypoint: /srv/application/docker/start-cron.sh
+
+
+    postgres:
+        image: postgres:9.6
+        environment:
+            POSTGRES_USER: app
+            POSTGRES_PASSWORD: app
+            POSTGRES_DB: app

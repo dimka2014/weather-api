@@ -1,0 +1,5 @@
+[run]
+include = weather_api/*
+omit = *migrations*, *tests*
+plugins =
+    django_coverage_plugin
