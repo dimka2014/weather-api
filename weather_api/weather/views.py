@@ -2,6 +2,7 @@ from rest_framework import generics, filters, permissions, viewsets, mixins, ser
 from rest_framework.response import Response
 from django_pyowm.models import Location, Forecast
 
+from weather_api.weather.utils import fetch_forecast_for_location
 from .serializers import LocationSerializer, ForecastSerializer
 
 
@@ -59,4 +60,6 @@ class UserLocationAddDeleteViewSet(mixins.UpdateModelMixin, mixins.DestroyModelM
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         self.request.user.locations.add(instance)
+        if not Forecast.objects.filter(location_id=instance.id).exists():
+            fetch_forecast_for_location(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
