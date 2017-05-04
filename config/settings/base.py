@@ -63,6 +63,8 @@ DATABASES = {
 EMAIL_CONFIG = env.email_url('EMAIL_URL', default='filemail://mails')
 vars().update(EMAIL_CONFIG)
 
+MIGRATION_MODULES = {'django_pyowm': 'weather_api.core.django_pyowm_migrations'}
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
