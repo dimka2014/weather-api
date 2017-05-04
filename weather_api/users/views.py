@@ -4,6 +4,7 @@ from rest_framework import generics, permissions, serializers, status, mixins
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
+from rest_framework_jwt.views import ObtainJSONWebToken
 
 from .models import User
 from .serializers import UserSerializer, ResetPasswordSerializer, ChangePasswordSerializer, EmailSerializer
@@ -11,6 +12,16 @@ from .serializers import UserSerializer, ResetPasswordSerializer, ChangePassword
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+
+class ObtainJWT(ObtainJSONWebToken):
+    """
+    API View that receives a POST with a user's username and password and returns a JSON Web Token 
+    that can be used for authorized requests.
+    
+    For authorized requests, frontend app should send `Authorization` header with value "Bearer `token`"
+    """
+    pass
 
 
 class RegistrationView(generics.CreateAPIView):

@@ -1,20 +1,26 @@
 ## Quickstart ##
 
 It's project generated using [my cookiecutter](https://github.com/dimka2014/cookiecutter-django-rest).\
-First create and activate your virtualenv, you can use [virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/)
+First create and activate your virtualenv with python3 interpreter, you can use [virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/)
 cd to your project and install the dependencies
 
     pip install -r requirements/development.txt
+
+Project use [OpenWeatherMap api](https://openweathermap.org/api), so you should configure your api key.
 
 You should configure project using environment variables. I prefer to do it using `.env` file
 There are plugins or utilities which fill your environment from `.env` file:
 - [Env File for PyCharm](https://plugins.jetbrains.com/plugin/7861-env-file)
 - [autoenv for command line](https://github.com/kennethreitz/autoenv)
 
-The example configuration is in env.example file
+Or you can just export environment vars which you need
 
-To start project you need to run migrations and command which save OWM locations to database 
+    
+    export OWM_KEY=your_open_weather_map_key
 
+The example configuration is in `env.example` file
+
+To start project, run migrations and command which save OWM locations to database 
 
     python manage.py migrate
     python manage.py save_locations_to_database

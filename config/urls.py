@@ -12,7 +12,7 @@ schema_view = get_swagger_view(title='Application API')
 
 urlpatterns = [
     url(r'^admin-panel/', admin.site.urls),
-    url(r'^api/swagger/$', schema_view),
+    url(r'^$', schema_view),
     url(r'^api/', include('weather_api.users.urls')),
     url(r'^api/', include('weather_api.weather.urls')),
 ]
