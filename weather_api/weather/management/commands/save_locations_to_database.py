@@ -23,5 +23,5 @@ class Command(BaseCommand):
                 locations.append(location)
             except ValueError:
                 pass
-        Location.objects.bulk_create(locations, 10000)
+        Location.objects.bulk_create(locations, 500)
         self.stdout.write(self.style.SUCCESS('{} locations saved to database'.format(len(locations))))
