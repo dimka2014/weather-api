@@ -78,17 +78,12 @@ class RegistrationViewTestCase(TestCase):
         self.assertEqual(response.status_code, 201)
         user = User.objects.get(email='user@test.com')
         self.assertIsNotNone(user.confirmation_token)
-        self.assertFalse(user.is_active)
-
-        self.assertEqual(len(mail.outbox), 1)
-        message = mail.outbox.pop()
-        self.assertIn(user.confirmation_token, message.body)
-        self.assertIn(user.email, message.to)
+        self.assertTrue(user.is_active)
 
         self.assertEqual(user.id, response.data['id'])
         self.assertEqual(user.email, response.data['email'])
         response = client.post('/api/auth/', data, format='json')
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 200)
 
     def test_registration_email_duplicate(self):
         User.objects.create_user(email='user@test.com', password='usertest')

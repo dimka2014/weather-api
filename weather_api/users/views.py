@@ -23,8 +23,7 @@ class RegistrationView(generics.CreateAPIView):
     authentication_classes = ()
 
     def perform_create(self, serializer):
-        user = serializer.save(confirmation_token=uuid.uuid4().hex, is_active=False)
-        user.email_confirm_account(request=self.request)
+        serializer.save(confirmation_token=uuid.uuid4().hex, is_active=True)
 
 
 class EmailConfirmationView(generics.GenericAPIView):
@@ -46,7 +45,10 @@ class EmailConfirmationView(generics.GenericAPIView):
 
 class ResetPasswordEmailView(generics.GenericAPIView):
     """
-    Send email with token for reset password
+    Send email with token for reset password.
+    Frontend should realize page /reset-password/{reset_password_token} page.
+    Email message will direct user to this page, when user go to it, frontend app should send request to 
+    reset-password api endpoint
     """
     serializer_class = EmailSerializer
     permission_classes = (permissions.AllowAny,)
@@ -65,7 +67,7 @@ class ResetPasswordEmailView(generics.GenericAPIView):
 
 class ResetPasswordView(mixins.UpdateModelMixin, generics.GenericAPIView):
     """
-    Find user by reset password token and change password
+    Find user by reset password token, change password and send email that password is changed
     """
     queryset = User.objects.all()
     serializer_class = ResetPasswordSerializer
@@ -84,7 +86,7 @@ class ResetPasswordView(mixins.UpdateModelMixin, generics.GenericAPIView):
 
 class ChangePasswordView(mixins.UpdateModelMixin, generics.GenericAPIView):
     """
-    Find user by reset password token and change password
+    Change user password and send email that password is changed
     """
     serializer_class = ChangePasswordSerializer
     permission_classes = (permissions.IsAuthenticated,)

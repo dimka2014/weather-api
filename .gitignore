@@ -27,3 +27,4 @@ staticfiles/
 
 .cache/
 development.sqlite3
+/mails/
