@@ -30,6 +30,7 @@ jobs:
           command: |
             mkdir -p ~/dockercache
             if [[ -e ~/dockercache/weather_api.tar ]]; then docker load -i ~/dockercache/weather_api.tar; fi
+            docker version
             docker build -t weather_api -f docker/Dockerfile --cache-from=weather_api:latest .
 
       - run:
