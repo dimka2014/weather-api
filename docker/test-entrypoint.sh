@@ -2,7 +2,7 @@
 
 pip install -r requirements/test.txt
 echo "Running pylint"
-pylint project_name/
+pylint -E weather_api/
 if [[ $? != 0 ]]; then
     exit 1
 else

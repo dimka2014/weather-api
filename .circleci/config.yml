@@ -20,6 +20,11 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
 
+      - restore_cache:
+          keys:
+            - weather-{{ .Branch }}
+            - weather-master
+
       - run:
           name: Build image
           command: |
@@ -28,4 +33,15 @@ jobs:
       - run:
           name: Run tests
           command: |
-            docker run --entrypoint="/srv/application/docker/test-entrypoint.sh" -e DJANGO_SETTINGS_MODULE=config.settings.test  weather_api 
+            docker run --entrypoint="/srv/application/docker/test-entrypoint.sh" -e DJANGO_SETTINGS_MODULE=config.settings.test weather_api
+
+      - run:
+          name: Save image
+          command: |
+            mkdir ~/dockercache
+            docker save weather_api > ~/dockercache/weather_api.tar
+
+      - save_cache:
+          key: weather-{{ .Branch }}
+          paths:
+            - "~/dockercache"
