@@ -28,7 +28,9 @@ jobs:
       - run:
           name: Build image
           command: |
-            docker build -t weather_api -f docker/Dockerfile .
+            mkdir ~/dockercache
+            if [[ -e ~/dockercache/weather_api.tar ]]; then docker load -i ~/dockercache/weather_api.tar; fi
+            docker build -t weather_api -f docker/Dockerfile --cache-from=weather_api:latest .
 
       - run:
           name: Run tests
@@ -38,7 +40,6 @@ jobs:
       - run:
           name: Save image
           command: |
-            mkdir ~/dockercache
             docker save weather_api > ~/dockercache/weather_api.tar
 
       - save_cache:
